@@ -266,7 +266,7 @@ class ProgramDatabase:
         if not read_only and embedding_model is not None:
             self.embedding_client = EmbeddingClient(model_name=embedding_model)
         else:
-            self.embedding_client = None
+            self.embedding_client: Optional[EmbeddingClient] = None
 
         self.last_iteration: int = 0
         self.best_program_id: Optional[str] = None

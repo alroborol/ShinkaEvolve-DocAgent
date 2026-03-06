@@ -27,12 +27,19 @@ from ShinkaEvolve.examples.zed_doc_prompt.internal.patch_parser import parse_fil
 from ShinkaEvolve.examples.zed_doc_prompt.internal.name_extractor import (
     collect_funcs_vars_from_files_map,
 )
+from ShinkaEvolve.examples.zed_doc_prompt.internal.copilot_cli_client import (
+    CopilotCLIClient,
+    is_copilot_cli_available,
+)
 
 def make_llm_client_class():
     """Return an LLMClient class (real one if available, otherwise a lightweight stub).
 
     This factory avoids importing heavy dependencies at module import time.
     """
+    if is_copilot_cli_available():
+        return CopilotCLIClient
+
     try:
         from shinka.llm import LLMClient  # type: ignore
         return LLMClient

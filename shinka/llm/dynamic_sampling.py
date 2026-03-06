@@ -33,6 +33,15 @@ def _logexpm1(z):
 
 
 class BanditBase(ABC):
+    _arm_names: Optional[List[str]]
+    _name_to_idx: dict
+    _n_arms: int
+    _baseline: float
+    _shift_by_baseline: bool
+    _shift_by_parent: bool
+    _auto_decay: Optional[float]
+    rng: Any
+
     def __init__(
         self,
         n_arms: Optional[int] = None,

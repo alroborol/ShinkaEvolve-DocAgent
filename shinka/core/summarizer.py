@@ -33,10 +33,11 @@ class MetaSummarizer:
         self.max_recommendations = max_recommendations
 
         # Meta state
-        self.meta_summary = None
-        self.meta_scratch_pad = None  # New: Global insights scratchpad
-        self.meta_recommendations = None
-        self.meta_recommendations_history = []
+        self.meta_summary: Optional[str] = None
+        self.meta_scratch_pad: Optional[str] = None  # New: Global insights scratchpad
+        self.meta_recommendations: Optional[str] = None
+        self.meta_recommendations_history: List[str] = []
+        self._last_logged_count: Optional[int] = None
 
         # Track programs evaluated since last meta query for persistent memory
         self.evaluated_since_last_meta: List[Program] = []

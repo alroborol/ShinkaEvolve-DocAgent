@@ -145,7 +145,7 @@ class EvolutionRunner:
 
         # Initialize LLM selection strategy
         if evo_config.llm_dynamic_selection is None:
-            self.llm_selection = None
+            self.llm_selection: Optional[BanditBase] = None
         elif isinstance(evo_config.llm_dynamic_selection, BanditBase):
             self.llm_selection = evo_config.llm_dynamic_selection
         elif (evo_config.llm_dynamic_selection.lower() == "ucb") or (
@@ -183,7 +183,7 @@ class EvolutionRunner:
                 verbose=verbose,
             )
         else:
-            self.embedding = None
+            self.embedding: Optional[EmbeddingClient] = None
 
         if evo_config.meta_llm_models is not None:
             self.meta_llm = LLMClient(
@@ -192,7 +192,7 @@ class EvolutionRunner:
                 verbose=verbose,
             )
         else:
-            self.meta_llm = None
+            self.meta_llm: Optional[LLMClient] = None
 
         if evo_config.novelty_llm_models is not None:
             self.novelty_llm = LLMClient(
@@ -201,7 +201,7 @@ class EvolutionRunner:
                 verbose=verbose,
             )
         else:
-            self.novelty_llm = None
+            self.novelty_llm: Optional[LLMClient] = None
 
         # Initialize PromptSampler for handling LLM code prompts
         self.prompt_sampler = PromptSampler(

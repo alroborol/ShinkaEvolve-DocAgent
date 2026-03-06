@@ -1,6 +1,5 @@
 import os
 import openai
-import google.generativeai as genai
 import pandas as pd
 from typing import Union, List, Optional, Tuple
 import numpy as np
@@ -54,6 +53,7 @@ def get_client_model(model_name: str) -> tuple[Union[openai.OpenAI, str], str]:
         api_key = os.getenv("GEMINI_API_KEY")
         if not api_key:
             raise ValueError("GEMINI_API_KEY environment variable not set for Gemini models")
+        import google.generativeai as genai
         genai.configure(api_key=api_key)
         client = "gemini"  # Use string identifier for Gemini
         model_to_use = model_name
@@ -99,6 +99,7 @@ class EmbeddingClient:
         # Handle Gemini models
         if self.model_name in GEMINI_EMBEDDING_MODELS:
             try:
+                import google.generativeai as genai
                 embeddings = []
                 total_tokens = 0
                 

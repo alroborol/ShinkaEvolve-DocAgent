@@ -19,7 +19,9 @@ def generate_docs() -> str:
     try:
         paths, branch = fetch_repo_tree(repo)
     except Exception:
-        return "Could not fetch repository tree for documentation generation."
+        env_repo = os.getenv("GITHUB_REPO")
+        hint = f" (requested repo: {env_repo})" if env_repo is not None else ""
+        return "Could not fetch repository tree for documentation generation." + hint
 
     tree = build_file_tree(paths)
     selected = ask_llm_to_select_files(client, tree, paths, SYSTEM_MESSAGE)

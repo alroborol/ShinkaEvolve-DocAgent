@@ -21,6 +21,7 @@ from .models import (
     query_deepseek,
     query_gemini,
     query_ollama,
+    query_copilot,
     QueryResult,
 )
 from .ollama_utils import is_ollama_model_name
@@ -212,6 +213,8 @@ def query(
     elif isinstance(model_name, str) and model_name.startswith("gpt-oss:"):
         # Support local gpt-oss models served via an OpenAI-compatible endpoint.
         query_fn = query_openai
+    elif isinstance(model_name, str) and model_name.startswith("copilot:"):
+        query_fn = query_copilot
     elif model_name in DEEPSEEK_MODELS.keys():
         query_fn = query_deepseek
     elif model_name in GEMINI_MODELS.keys():

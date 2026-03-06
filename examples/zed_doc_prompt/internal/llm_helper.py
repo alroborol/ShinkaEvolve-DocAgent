@@ -1,11 +1,22 @@
 from typing import Any, List
 import json
+from ..initial import SELECTION_PROMPT_TEMPLATE
+from .copilot_cli_client import CopilotCLIClient, is_copilot_cli_available
 
 
 def make_client() -> Any:
     """Return an LLM client. Uses `shinka.llm.LLMClient` when available,
     otherwise returns a lightweight dummy with the same surface used here.
     """
+    if is_copilot_cli_available():
+        return CopilotCLIClient(
+            model_names=["copilot:gpt-5-mini"],
+            temperatures=0.0,
+            max_tokens=4096,
+            reasoning_efforts="auto",
+            verbose=False,
+        )
+
     try:
         from shinka.llm import LLMClient  # type: ignore
     except Exception:
@@ -34,12 +45,7 @@ def ask_llm_to_select_files(client: Any, tree_text: str, all_paths: List[str], s
     is resilient to extra text by attempting to extract a JSON array if direct
     parsing fails.
     """
-    prompt = (
-        "Given the project file tree below, pick which files are most relevant for "
-        "generating concise developer-facing documentation about implementation, "
-        "APIs, data flows and edge cases. Reply ONLY with a JSON array of the "
-        "relative file paths you choose (no extra text).\n\n" + tree_text
-    )
+    prompt = SELECTION_PROMPT_TEMPLATE + "\n\n" + tree_text
     kwargs = client.get_kwargs()
     res = client.query(msg=prompt, system_msg=system_msg, llm_kwargs=kwargs)
     content = (getattr(res, "content", "") or "").strip()
